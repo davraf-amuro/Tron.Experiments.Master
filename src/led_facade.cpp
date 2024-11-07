@@ -15,11 +15,11 @@ void FlashingLed() {
     if (ledState == LOW) {
       digitalWrite(LED_FLASHING, HIGH);
       Serial.println("LED acceso");
-      oledDecorator.SetRow2("LED acceso");
+      oledDecorator.setRow1("LED acceso");
     } else {
       digitalWrite(LED_FLASHING, LOW);
       Serial.println("LED spento");
-      oledDecorator.SetRow2("LED spento");
+      oledDecorator.setRow2("LED spento");
     }
   }
 }

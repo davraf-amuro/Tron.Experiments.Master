@@ -7,17 +7,24 @@ class OledDecorator {
 public:
     OledDecorator(Adafruit_SSD1306& display);
     void render();
-    void SetRow1(String text);
-    void SetRow2(String text);
-    void SetRow3(String text);
-    void SetRow4(String text);
+
+    enum Style {
+        STYLE_4ROWS,
+        STYLE_2ROWS     
+    };
+    void setStyle(Style style);
+    void setRow1(String text);
+    void setRow2(String text);
+    void setRow3(String text);
+    void setRow4(String text);
+    void clearRows();
 
 private:
-    Adafruit_SSD1306& display;
-    String row1;
-    String row2;
-    String row3;
-    String row4;
+    Adafruit_SSD1306& display;    
+    String row1, row2, row3, row4;
+    Style _style = STYLE_4ROWS;
+    void render4rows();
+    void render2rows();
 };
 
 #endif // OLED_DECORATOR_H

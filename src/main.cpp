@@ -18,18 +18,22 @@ OledDecorator oledDecorator(display);
 void setup() {
     Serial.begin(115200); // Inizializza la comunicazione seriale
 
-    Wire.begin(); // Inizializza la comunicazione I2C
-    Serial.println("Wire inizializzata");
-    delay(1000);
-    display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
+    //-------------------- Inizializzazione display OLED --------------------
+    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    if(!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
+        Serial.println(F("SSD1306 allocation failed"));
+        for(;;); // Don't proceed, loop forever
+    }
     Serial.println("Display inizializzato");
-    delay(1000);
+    // display.display();
+    // delay(1000);
+    // display.clearDisplay();
+    oledDecorator.setRow1("Display Inizializzato");
+    oledDecorator.render();
 
-    // Inizializza WiFi in modalità STA
+    //-------------------- Inizializzazione ESP-NOW --------------------
     WiFi.mode(WIFI_STA);
     Serial.println("WiFi inizializzato in modalità STA");
-
-    // Inizializza ESP-NOW
     if (esp_now_init() != ESP_OK) {
         Serial.println("Errore durante l'inizializzazione di ESP-NOW");
         return;
@@ -38,22 +42,61 @@ void setup() {
     esp_now_register_recv_cb(OnDataRecv);
     esp_now_register_send_cb(OnDataSent);
     Serial.println("ESP-NOW inizializzato");
-
-    pinMode(LED_FLASHING, OUTPUT);
-
-    // Ottieni l'indirizzo MAC del dispositivo
-    Serial.println("Accedo ai dati di rete");
-    macAddress = GetMacAddress();
-    Serial.println("Mac Address:" + macAddress);
-    oledDecorator.SetRow1("MA:" + macAddress);
-    // oledDecorator.SetRow2("Riga 2");
-    // oledDecorator.SetRow3("Riga 3");
-    oledDecorator.SetRow4("-davraf-");
+    oledDecorator.setRow2("ESP-NOW inizializzato");
     oledDecorator.render();
+
+    // pinMode(LED_FLASHING, OUTPUT);
+
+    // // Ottieni l'indirizzo MAC del dispositivo
+    // Serial.println("Accedo ai dati di rete");
+    // macAddress = GetMacAddress();
+    // Serial.println("Mac Address:" + macAddress);
+    // oledDecorator.setRow1("MA:" + macAddress);
+    // // oledDecorator.setRow2("Riga 2");
+    // // oledDecorator.setRow3("Riga 3");
+    // oledDecorator.setRow4("-davraf-");
+    // oledDecorator.render();
+
+    // // Imposta il cursore nella posizione (x, y)
+    // display.setCursor(0, 0);
+    // // Imposta la dimensione del testo
+    // display.setTextSize(1);
+    // // Imposta il colore del testo
+    // display.setTextColor(SSD1306_WHITE);
+    // // Scrivi il testo "ciao"
+    // display.print("ciao");
+    // // Visualizza il testo sul display
+    // display.display();
+    // delay(3000);
+
+    // display.setCursor(0, 20);
+    // // Imposta la dimensione del testo
+    // display.setTextSize(1);
+    // // Imposta il colore del testo
+    // display.setTextColor(SSD1306_WHITE);
+    // // Scrivi il testo "ciao"
+    // display.print("bello");
+    // // Visualizza il testo sul display
+    // display.display();
 }
 
 void loop() {
-    FlashingLed();
+    Serial.println("Ciao");
+
+    oledDecorator.setStyle(OledDecorator::Style::STYLE_4ROWS);
+    oledDecorator.setRow3("");
+    oledDecorator.setRow4("Ciao");
+    oledDecorator.render();
+    delay(1000);
+    oledDecorator.setRow4("");
+    oledDecorator.setRow3("Ciao");
+    oledDecorator.render();
+    delay(1000);
+
+    oledDecorator.setStyle(OledDecorator::Style::STYLE_2ROWS);
+    oledDecorator.render();
+    delay(2000);
+    // FlashingLed();
     
     // // Esempio di invio dati
     // struct_message outgoingMessage;
@@ -69,10 +112,10 @@ void loop() {
 
     // if (result == ESP_OK) {
     //     Serial.println("Invio riuscito");
-    //     oledDecorator.SetRow3("ESP-NOW inviato");
+    //     oledDecorator.setRow3("ESP-NOW inviato");
     // } else {
     //     Serial.println("Errore durante l'invio");
-    //     oledDecorator.SetRow3("ESP-NOW errore");
+    //     oledDecorator.setRow3("ESP-NOW errore");
     // }
 
     // oledDecorator.render();
