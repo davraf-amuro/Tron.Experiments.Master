@@ -8,20 +8,29 @@ void OledDecorator::setStyle(Style style) {
     _style = style;
 }
 
-void OledDecorator::setRow1(String text) {
+void OledDecorator::setRow1(String text) { setRow1(text, false); }
+void OledDecorator::setRow2(String text) { setRow2(text, false); }
+void OledDecorator::setRow3(String text) { setRow3(text, false); }
+void OledDecorator::setRow4(String text) { setRow4(text, false); }
+
+void OledDecorator::setRow1(String text, bool renderNow) {
     row1 = text;
+    if (renderNow) { render(); }
 }
 
-void OledDecorator::setRow2(String text) {
+void OledDecorator::setRow2(String text, bool renderNow) {
     row2 = text;
+    if (renderNow) { render(); }
 }
 
-void OledDecorator::setRow3(String text) {
+void OledDecorator::setRow3(String text, bool renderNow) {
     row3 = text;
+    if (renderNow) { render(); }
 }
 
-void OledDecorator::setRow4(String text) {
+void OledDecorator::setRow4(String text, bool renderNow) {
     row4 = text;
+    if (renderNow) { render(); }
 }
 
 void OledDecorator::clearRows() {
@@ -43,6 +52,12 @@ void OledDecorator::render() {
     case Style::STYLE_2ROWS:
         render2rows();
         break;
+    // case Style::STYLE_3ROWS:
+    //     render3rows();
+    //     break;
+    case Style::STYLE_1ROWS:
+        render1rows();
+        break;
     default:
         break;
     }
@@ -63,9 +78,25 @@ void OledDecorator::render4rows() {
 }
 
 void OledDecorator::render2rows() {
-    display.setTextSize(2);
+    display.setTextSize(1,2);
     display.setCursor(0, 0);
     display.println(row1);
-    display.setCursor(0, 16);
+    display.setCursor(0, 17);
     display.println(row2);
+}
+
+void OledDecorator::render3rows() {
+    display.setTextSize(1,2);
+    display.setCursor(0, 0);
+    display.println(row1);
+    display.setCursor(0, 10);
+    display.println(row2);
+    display.setCursor(0, 20);
+    display.println(row4);
+}
+
+void OledDecorator::render1rows() {
+    display.setTextSize(1,4);
+    display.setCursor(0, 0);
+    display.println(row1);
 }
