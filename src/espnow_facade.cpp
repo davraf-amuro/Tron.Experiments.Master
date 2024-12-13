@@ -1,8 +1,15 @@
 #include "espnow_facade.h"
+#include "oled_decorator.h"
 
 struct_message incomingMessage;
 esp_now_peer_info_t peerInfo;
 static char macReceiver[18];
+OledDecorator* oleDisplay = nullptr; // Inizializza il puntatore a nullptr
+
+// Funzione di inizializzazione per impostare oleDisplay
+void initOledDisplay(OledDecorator* display) {
+    oleDisplay = display;
+}
 
 // Callback per la ricezione dei dati
 void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
@@ -21,6 +28,10 @@ void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
     Serial.println(incomingMessage.c);
     Serial.print("Bool: ");
     Serial.println(incomingMessage.d);
+
+    oleDisplay->setRow4(incomingMessage.a, true);
+    delay(1000);
+    oleDisplay->setRow4("", true);
 }
 
 // Callback per l'invio dei dati

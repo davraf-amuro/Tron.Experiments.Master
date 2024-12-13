@@ -3,6 +3,7 @@
 
 #include <esp_now.h>
 #include <WiFi.h>
+#include "oled_decorator.h"
 
 // Struttura per i dati da inviare/ricevere
 typedef struct struct_message {
@@ -17,6 +18,7 @@ extern struct_message incomingMessage;
 // Create peer interface
 extern esp_now_peer_info_t peerInfo;
 
+void initOledDisplay(OledDecorator* display);
 // Callback per la ricezione dei dati
 void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len);
 
