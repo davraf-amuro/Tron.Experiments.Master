@@ -11,6 +11,20 @@ void initOledDisplay(OledDecorator* display) {
     oleDisplay = display;
 }
 
+// Funzione per registrare un peer
+void RegisterPeer(uint8_t broadcastAddress[]) {
+    // Setta il MAC Address del peer
+    memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+    // Setta il peer come non bloccante
+    peerInfo.channel = 0;
+    peerInfo.encrypt = false;
+    // Aggiunge il peer
+    if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+        Serial.println("Errore durante l'aggiunta del peer");
+        return;
+    }
+}
+
 // Callback per la ricezione dei dati
 void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
     memcpy(&incomingMessage, data, sizeof(incomingMessage));
